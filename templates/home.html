@@ -18,7 +18,7 @@
             {% for article in articles[i*4:(i+1)*4] %}
             <div class="col-md-3 portfolio-item">
                 <a href="{{ article.url }}">
-                        <img class="img-thumbnail" src="{% if article.image_url %}{{  article.image_url }}{% else %}{{ url_for('static', path='/broken.png') }}{% endif %}" alt="">
+                        <img class="img-thumbnail" src="{% if article.image_url %}{{  article.image_url }}{% else %}{{ url_for('static', path='/yt.jpg') }}{% endif %}" alt="">
                 </a>
                 <h3>
                     <a href="{{ article.url }}">{{ article.title }}</a>
