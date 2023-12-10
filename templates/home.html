@@ -1,0 +1,48 @@
+<html>
+<head>
+    <title>News.am - Top News</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='bootstrap.min.css') }}">
+    </head>
+<body>
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">News.am <br><small>Top news</small></h1>
+            </div>
+        </div>
+
+        {% for i in range((articles | length) // 4 + 1) %}
+        <div class="row">
+
+            {% for article in articles[i*4:(i+1)*4] %}
+            <div class="col-md-3 portfolio-item">
+                <a href="{{ article.url }}">
+                        <img class="img-thumbnail" src="{% if article.image_url %}{{  article.image_url }}{% else %}{{ url_for('static', path='/broken.png') }}{% endif %}" alt="">
+                </a>
+                <h3>
+                    <a href="{{ article.url }}">{{ article.title }}</a>
+                </h3>
+                <p>{{ article.content }}</p>
+            </div>
+            {% endfor %}
+
+        </div>
+        {% endfor %}
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

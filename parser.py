@@ -6,7 +6,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 @dataclass
 class Article:
-    link: str
+    url: str
     title: str
     content: str
     image_url: str = None
@@ -43,7 +43,7 @@ class NewsParser:
         return articles
 
     def __process_articles(self, article):
-        response = get(article.link)
+        response = get(article.url)
         if response.status_code != 200:
             raise Exception(f'The page {article.link} is not accessable!')
 
@@ -52,9 +52,14 @@ class NewsParser:
         article_text = soup.find('div', {'class': 'article-text'})
         
         p_tags = article_text.span.find_all('p')
-        content = ''.join([p_tag.text for p_tag in p_tags])
-        article.content = f"{content[:50]}..." if len(content) > 50 else content
+        words = []
+        for p_tag in p_tags:
+            words.extend(p_tag.text.split())
+            if len(words) > 50:
+                words[50:] = ['...']
+                break
+        article.content = ' '.join(words)
 
         image_path = article_text.img['src']
         if image_path.endswith('default.jpg'):
-            image_url = f"{self.base_url}/{image_path}"
+            article.image_url = f"{self.base_url}/{image_path}"
