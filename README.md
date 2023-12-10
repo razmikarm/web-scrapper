@@ -10,7 +10,7 @@ The scrapper uses `Top news` section of https://news.am/eng/ news website.
 
 1. Create a virtual environment
 
-    ```python -m venv env```
+    ```python -m venv venv```
 
 2. Activate the virtual environment
 
