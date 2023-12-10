@@ -6,5 +6,4 @@ parser = NewsParser(
     path='/eng/'
 )
 
-[pprint(report.dict()) for report in parser.parse()]
-
+pprint([report.dict() for report in parser.parse()])
