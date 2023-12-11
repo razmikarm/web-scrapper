@@ -11,7 +11,7 @@ templates = Jinja2Templates(directory="templates")
 @app.get("/")
 def home(request: Request):
     parser = NewsParser(
-        base_url='https://news.am',
+        base_url='news.am',
         path='/eng/'
     )
     data = parser.parse()

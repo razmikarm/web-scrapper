@@ -20,7 +20,7 @@ class NewsParser:
     def __init__(self, base_url, path):
         self.base_url = base_url
         self.path = path
-        self.page = f"{base_url}{path}"
+        self.page = f"https://{base_url}{path}"
         
     def parse(self):
         response = get(self.page)
@@ -33,7 +33,9 @@ class NewsParser:
         top_news_tag = soup.find('div', {'class': 'short-top'})
 
         for a_tag in top_news_tag:
-            link = f"{self.base_url}{a_tag['href']}"
+            link = a_tag['href']
+            if not link.startswith('https'):
+                link = f"{self.page}{link}"
             title = a_tag.span.string.strip()
             articles.append(Article(link, title, None, None))
 
@@ -50,8 +52,12 @@ class NewsParser:
         html = response.text
         soup = BeautifulSoup(html, 'html.parser')
         article_text = soup.find('div', {'class': 'article-text'})
-        
-        p_tags = article_text.span.find_all('p')
+        if article_text is None:
+            article_text = soup.find(id='opennewstext')
+            p_tags = article_text.find_all('p')[1:]
+        else:
+            p_tags = article_text.span.find_all('p')
+
         words = []
         for p_tag in p_tags:
             words.extend(p_tag.text.split())
@@ -60,6 +66,7 @@ class NewsParser:
                 break
         article.content = ' '.join(words)
 
-        image_path = article_text.img['src']
-        if image_path.endswith('default.jpg'):
-            article.image_url = f"{self.base_url}/{image_path}"
+        image_path = article_text.img['src'].strip('/')
+        if not image_path.endswith('logo.png'):
+            sub_domain = article.url.split(self.base_url)[0]
+            article.image_url = f"{sub_domain}{self.base_url}/{image_path}"
