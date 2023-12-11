@@ -35,7 +35,7 @@ class NewsParser:
         for a_tag in top_news_tag:
             link = a_tag['href']
             if not link.startswith('https'):
-                link = f"{self.page}{link}"
+                link = f"https://{self.base_url}{link}"
             title = a_tag.span.string.strip()
             articles.append(Article(link, title, None, None))
 
